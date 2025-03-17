@@ -5,7 +5,9 @@ import google.generativeai as genai
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})  
+def home():
+    return "Flask AI Assistant is Running! 🚀"
 
 # Configure the Gemini API
 GOOGLE_API_KEY = "AIzaSyAvsbC4c8VMWqnxIqWfQ8zAeUXg2jvF8hE"
