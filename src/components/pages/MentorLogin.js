@@ -1,35 +1,46 @@
 import React, { useState, useEffect, useRef } from "react";
+import {
+    Box,
+    Button,
+    TextField,
+    Typography,
+    Link,
+} from "@mui/material";
+import AcUnitIcon from "@mui/icons-material/AcUnit"; // Snowflake icon
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Box, Button, TextField, Typography, Link } from "@mui/material";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
 
 const mentorIDRegex = /^BNM\d{4}$/;
 
 export default function MentorSignInPage() {
-    const [mentorID, setMentorID] = useState("");
+    const navigate = useNavigate();
+    const [mentorID, setmentorID] = useState("");
+    const [errorMessage, setErrorMessage] = useState(""); // For login errors
     const [password, setPassword] = useState("");
     const [mentorIDError, setMentorIDError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [errorMessage, setErrorMessage] = useState(""); // Add state for error messages
 
+    // Refs for focusing on the fields
     const mentorIDRef = useRef(null);
     const passwordRef = useRef(null);
-    const navigate = useNavigate(); // Use navigate
 
+    // Focus on mentorID when the component mounts
     useEffect(() => {
         if (mentorIDRef.current) {
-            mentorIDRef.current.focus();
+            mentorIDRef.current.focus(); // Focus on mentorID field
         }
     }, []);
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Reset errors
         setMentorIDError("");
         setPasswordError("");
-        setErrorMessage("");
+        setErrorMessage(""); // Reset error message before login attempt
 
+        // Validate mentorID
         if (!mentorID) {
             setMentorIDError("Mentor ID is required.");
             mentorIDRef.current.focus();
@@ -40,6 +51,7 @@ export default function MentorSignInPage() {
             return;
         }
 
+        // Validate password
         if (!password) {
             setPasswordError("Password is required.");
             passwordRef.current.focus();
@@ -51,15 +63,20 @@ export default function MentorSignInPage() {
         }
 
         try {
-            console.log("Sending request with:", { mentorID, password });  // Log request payload
-        
-            const response = await axios.post("http://localhost:5002/api/mentor/login", { mentorID, password });
-        
-            console.log("Response received:", response.data);  // Log response from server
-        
+            console.log("Sending request with:", { mentorID, password });
+
+            // API call to backend for authentication
+            const response = await axios.post("http://localhost:5002/api/mentor/login", {
+                mentorID,
+                password
+            });
+
+            console.log("Response received:", response.data);
+
+            // Check response success
             if (response.data.success) {
-                localStorage.setItem("mentorToken", response.data.token);
-                navigate("/Dashboard-mentor");
+                localStorage.setItem("mentorToken", response.data.token); // Store token
+                navigate("/dashboard-mentor"); // Redirect to dashboard
             } else {
                 setErrorMessage("Invalid Mentor ID or Password. Please try again.");
             }
@@ -78,20 +95,33 @@ export default function MentorSignInPage() {
                 justifyContent: "center",
                 alignItems: "center",
                 background: "linear-gradient(to bottom, #f5f5f5 50%, #000 50%)",
-                px: 2,
+                px: 2, // Padding for smaller screens
             }}
         >
+            {/* Main Container */}
             <Box
                 sx={{
                     width: { xs: "100%", sm: "80%", md: "50%", lg: "40%" },
                     maxWidth: 450,
-                    backgroundColor: "#F8FAFC",
+                    backgroundColor: "#F8FAFC", // Light gray
                     borderRadius: 3,
                     boxShadow: 3,
                     padding: { xs: 3, sm: 4, md: 5 },
                 }}
             >
-                <Box sx={{ textAlign: "center", mb: 4 }}>
+                {errorMessage && (
+                    <Typography color="error" sx={{ textAlign: "center", mb: 2 }}>
+                        {errorMessage}
+                    </Typography>
+                )}
+
+                {/* Top Section */}
+                <Box
+                    sx={{
+                        textAlign: "center",
+                        mb: 4,
+                    }}
+                >
                     <Box
                         sx={{
                             display: "flex",
@@ -102,24 +132,30 @@ export default function MentorSignInPage() {
                         }}
                     >
                         <AcUnitIcon sx={{ fontSize: 40, color: "black.main" }} />
-                        <Typography variant="h5" fontWeight="bold" sx={{ fontFamily: "Courier" }}>
+                        <Typography
+                            variant="h5"
+                            fontWeight="bold"
+                            sx={{
+                                fontSize: { xs: "1.5rem", sm: "1.8rem" },
+                                fontFamily: "Courier",
+                            }}
+                        >
                             Career Compass
                         </Typography>
                     </Box>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                    <Typography
+                        variant="h6"
+                        fontWeight="bold"
+                        sx={{ mb: 1, fontSize: { xs: "1rem", sm: "1.2rem" } }}
+                    >
                         Account Login
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body3" color="text.secondary">
                         Enter your account info below:
                     </Typography>
                 </Box>
 
-                {errorMessage && (
-                    <Typography color="error" sx={{ textAlign: "center", mb: 2 }}>
-                        {errorMessage}
-                    </Typography>
-                )}
-
+                {/* Sign-In Form Section */}
                 <Box
                     sx={{
                         backgroundColor: "#fff",
@@ -129,6 +165,7 @@ export default function MentorSignInPage() {
                         mb: 3,
                     }}
                 >
+                    {/* mentorID and Password Section */}
                     <Box sx={{ mb: 3 }}>
                         <TextField
                             fullWidth
@@ -137,10 +174,26 @@ export default function MentorSignInPage() {
                             label="Mentor ID"
                             placeholder="BNM0001"
                             value={mentorID}
-                            onChange={(e) => setMentorID(e.target.value)}
+                            onChange={(e) => setmentorID(e.target.value)}
                             error={Boolean(mentorIDError)}
                             helperText={mentorIDError}
-                            sx={{ mb: 2 }}
+                            sx={{
+                                mb: 4,
+                                mt: 3,
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "12px",
+                                    backgroundColor: "#fff",
+                                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#FFA928",
+                                    },
+                                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#0073B1",
+                                    },
+                                },
+                                "& .MuiFormHelperText-root": {
+                                    fontSize: "0.85rem",
+                                },
+                            }}
                             inputRef={mentorIDRef}
                         />
                         <TextField
@@ -153,24 +206,51 @@ export default function MentorSignInPage() {
                             onChange={(e) => setPassword(e.target.value)}
                             error={Boolean(passwordError)}
                             helperText={passwordError}
-                            sx={{ mt: 1 }}
+                            sx={{
+                                mt: 1,
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "12px",
+                                    backgroundColor: "#fff",
+                                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#FFA928",
+                                    },
+                                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#0073B1",
+                                    },
+                                },
+                                "& .MuiFormHelperText-root": {
+                                    fontSize: "0.85rem",
+                                },
+                            }}
                             inputRef={passwordRef}
                         />
                     </Box>
 
+                    {/* Sign In Button */}
                     <Button
                         variant="contained"
+                        color="primary"
                         fullWidth
-                        sx={{ textTransform: "capitalize", mb: 2, py: 1, background: "#FFA928" }}
+                        sx={{
+                            textTransform: "capitalize",
+                            mb: 2,
+                            py: { xs: 1, sm: 1.5 },
+                            background: "#FFA928",
+                        }}
                         onClick={handleSubmit}
                     >
                         Sign In
                     </Button>
 
+                    {/* Links Section */}
                     <Box sx={{ textAlign: "center" }}>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ mt: 1, fontSize: { xs: "0.85rem", sm: "0.95rem" } }}
+                        >
                             <Link href="/mentor/register" underline="hover" color="primary">
-                                Create Mentor Account
+                                Create Mentor Account<br></br>
                             </Link>
                         </Typography>
                     </Box>

@@ -16,7 +16,7 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
+// import axios from "axios";
 const steps = ["User Details", "Academics", "Profile Details"];
 
 const SettingsPage = () => {
@@ -30,6 +30,9 @@ const SettingsPage = () => {
         collegeEmail: "",
         gender: "",
         dob: "",
+        selectedMajors: [],
+        collegeName: "",
+        shortBio: "",
     });
 
     const [formErrors, setFormErrors] = useState({});
@@ -104,7 +107,7 @@ const SettingsPage = () => {
                 },
                 body: JSON.stringify(formData),
             });
-    
+
             if (response.ok) {
                 toast.success("Form submitted successfully!");
             } else {
@@ -284,7 +287,11 @@ const SettingsPage = () => {
                         {/* College */}
                         <FormControl fullWidth sx={{ mb: 2 }}>
                             <Typography fontFamily="Courier">Choose the college you're attending or attended</Typography>
-                            <TextField multiline placeholder="Enter your college name" />
+                            <TextField
+                                placeholder="Enter your college name"
+                                value={formData.collegeName}
+                                onChange={(e) => handleInputChange("collegeName", e.target.value)}
+                            />
                         </FormControl>
 
                         {/* Majors */}
@@ -325,6 +332,8 @@ const SettingsPage = () => {
                             multiline
                             variant="outlined"
                             sx={{ mb: 3 }}
+                            value={formData.shortBio}
+                            onChange={(e) => handleInputChange("shortBio", e.target.value)}
                         />
                     </>
                 )}

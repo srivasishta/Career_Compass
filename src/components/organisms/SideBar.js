@@ -15,6 +15,7 @@ import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
 import SettingsIcon from "@mui/icons-material/Settings";
 import ContactMailIcon from "@mui/icons-material/DraftsOutlined";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
+import AccountCircleIcon from "@mui/icons-material/AccountCircleOutlined"; // ✅ Import Profile Icon
 
 const Sidebar = ({ onMenuClick }) => {
     const location = useLocation(); // Get the current route path
@@ -31,6 +32,7 @@ const Sidebar = ({ onMenuClick }) => {
     const secondaryMenuItems = [
         { text: "Settings", path: "settings", icon: <SettingsIcon /> },
         { text: "Contact Us", path: "contact-us", icon: <ContactMailIcon /> },
+        { text: "Profile", path: "profile", icon: <AccountCircleIcon /> }, // ✅ Added Profile Button
     ];
 
     const handleMenuClick = (path) => {

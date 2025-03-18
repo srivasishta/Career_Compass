@@ -10,15 +10,15 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@bnmit\.in$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_()#])[A-Za-z\d@$!%*?&]{8,}$/;
 const mentorIDRegex = /^BNM\d{4}$/;
 
 export default function MentorRegister() {
     const [showForm, setShowForm] = useState(false);
     const isMobile = useMediaQuery("(max-width:800px)");
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // Added for navigation
 
     const [formData, setFormData] = useState({
         fullName: "",
@@ -47,6 +47,9 @@ export default function MentorRegister() {
         // Validation
         if (!formData.fullName) validationErrors.fullName = "Full Name is required";
         if (!formData.email) validationErrors.email = "Email is required";
+        else if (!emailRegex.test(formData.email)) {
+            validationErrors.email = "Please enter a valid email (e.g., ----@bnmit.in)";
+        }
 
         if (!formData.mentorID) {
             validationErrors.mentorID = "Mentor ID is required";
@@ -73,35 +76,35 @@ export default function MentorRegister() {
 
         setErrors({});
         try {
-                        // Sending the form data to the backend
-                        const response = await fetch('http://localhost:5002/api/mentor/register', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(formData),
-                        });
-        
-                        if (response.ok) {
-                            toast.success("Registration successful!");
-                            console.log("Form submitted", formData);
-                            setFormData({ fullName: "", usn: "", email: "", password: "" });
-                            setTimeout(() => {
-                                navigate("/dashboard");  // Redirect to dashboard
-                            }, 1000);  // Delay navigation slightly for better UX
-        
-                        } else {
-                            const errorData = await response.json();
-                            toast.error(errorData.message || "An error occurred.");
-                        }
-                    } catch (error) {
-                        toast.error("An error occurred while submitting the form.");
-                        console.error("Error submitting form:", error);
-                    }
+            // Sending form data to the backend
+            const response = await fetch("http://localhost:5002/api/mentor/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                toast.success("Registration successful!");
+                console.log("Form submitted", formData);
+                setFormData({ fullName: "", mentorID: "", email: "", password: "" });
+                setTimeout(() => {
+                    navigate("/dashboard-mentor"); // Redirect to dashboard
+                }, 1000);
+            } else {
+                const errorData = await response.json();
+                toast.error(errorData.message || "An error occurred.");
+            }
+        } catch (error) {
+            toast.error("An error occurred while submitting the form.");
+            console.error("Error submitting form:", error);
+        }
     };
 
     return (
         <Grid container sx={{ height: "100vh" }}>
+            {/* Left Side (White Background) */}
             <Grid
                 item
                 xs={12}
@@ -116,10 +119,20 @@ export default function MentorRegister() {
                 }}
             >
                 <Box sx={{ maxWidth: 400, width: "100%", textAlign: "center" }}>
-                    <Typography variant="h4" fontWeight="bold" mb={2}>
+                    <Typography
+                        variant="h4"
+                        fontWeight="bold"
+                        mb={2}
+                        sx={{ fontFamily: "courier" }}
+                    >
                         Get started today, it's 100% free.
                     </Typography>
-                    <Typography variant="body1" color="text.secondary" mb={4}>
+                    <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        mb={4}
+                        sx={{ fontFamily: "courier" }}
+                    >
                         Create an account and connect with a mentor within minutes!
                     </Typography>
 
@@ -191,7 +204,12 @@ export default function MentorRegister() {
                                     />
                                 </Grid>
                             </Grid>
-                            <Button fullWidth variant="contained" color="primary" type="submit">
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                            >
                                 Register
                             </Button>
                         </Box>
@@ -206,7 +224,8 @@ export default function MentorRegister() {
                 </Box>
             </Grid>
 
-            {!isMobile && (
+            {/* Right Section */}
+            {!isMobile &&
                 <Grid
                     item
                     xs={12}
@@ -221,17 +240,31 @@ export default function MentorRegister() {
                     }}
                 >
                     <Box sx={{ maxWidth: 550, width: "100%" }}>
-                        <Box sx={{ width: "100%", backgroundColor: "#fff", padding: 4, borderRadius: 6 }}>
-                            <Typography variant="h5" fontWeight="bold" mb={2} color="black">
-                                Welcome to Career Compass!
-                            </Typography>
-                            <Typography variant="body1" color="text.primary" mb={2}>
-                                Thank you for your interest in volunteering as a Compass mentor...
-                            </Typography>
-                        </Box>
+                        <Grid
+                            item
+                            xs={12}
+                            md={6}
+                            sx={{
+                                backgroundColor: "#000",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                color: "#fff",
+                            }}
+                        >
+                            <Box sx={{ width: { md: "140%", lg: "200%" }, backgroundColor: "#fff", padding: 4, borderRadius: 6, ml: '292px' }}>
+                                <Typography variant="h5" fontWeight="bold" mb={2} color="black" fontSize={'40px'} sx={{ fontFamily: "courier" }}>
+                                    Welcome to Career Compass!
+                                </Typography>
+                                <Typography variant="body1" color="text.primary" mb={2} sx={{ fontFamily: "courier" }}>
+                                    Thank you for your interest in volunteering as a Compass mentor to help students who are in need to achieve their college and career dreams. The Compass mentoring model is completely virtual: you will conduct all communication through our online platform, without ever having to share your personal contact info with your mentee. The platform also contains all the tools and resources you will need to be successful as a mentor, including mentor training that takes about 30 minutes to complete and can be found in the "help" tab upon registering.
+                                </Typography>
+                            </Box>
+                        </Grid>
                     </Box>
                 </Grid>
-            )}
+            }
         </Grid>
     );
 }

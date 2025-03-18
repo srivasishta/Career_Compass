@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SideBar from "../organisms/SideBar";
 import NavDash from "../organisms/NavDash";
 import DashboardContent from "../organisms/DashContent";
+import FloatingChat from "../organisms/FloatingChat";
 
 const Dashboard = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -56,6 +57,9 @@ const Dashboard = () => {
                     </Container>
                 </Box>
             </Box>
+
+            {/* Floating Chat Feature */}
+            <FloatingChat />
 
             {/* Mobile Sidebar Drawer */}
             <Drawer
