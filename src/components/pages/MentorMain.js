@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SidebarMentor from "../organisms/SideBarMentor";
 import MentorTrainingPage from "../organisms/MenMainContent";
 import NavMentor from "../organisms/NavMentor";
+import FloatingChat from "../organisms/FloatingChatMentor";
 
 const MentorMain = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -54,6 +55,9 @@ const MentorMain = () => {
                     </Container>
                 </Box>
             </Box>
+
+            {/* Floating Chat Feature */}
+            <FloatingChat />
 
             {/* Mobile Sidebar Drawer */}
             <Drawer

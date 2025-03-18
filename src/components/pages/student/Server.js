@@ -50,8 +50,8 @@ app.post("/api/mentor/register", async (req, res) => {
         const { fullName, mentorID, email, password } = req.body;
         const existingMentor = await Mentor.findOne({ $or: [{ mentorID }, { email }] });
         if (existingMentor) return res.status(400).json({ message: "Mentor ID or Email already registered" });
-        
-        const newMentor = new Mentor({ fullName, mentorID, email, password});
+
+        const newMentor = new Mentor({ fullName, mentorID, email, password });
         await newMentor.save();
 
         res.status(201).json({ success: true, message: "Mentor Registered Successfully" });
@@ -60,10 +60,9 @@ app.post("/api/mentor/register", async (req, res) => {
     }
 });
 
-
 app.post("/api/mentor/login", async (req, res) => {
     try {
-  
+
         const { mentorID, password } = req.body;
 
         if (!mentorID || !password) {
@@ -72,10 +71,10 @@ app.post("/api/mentor/login", async (req, res) => {
 
         // Log all mentors in the database
         const allMentors = await Mentor.find({});
-      
+
 
         const mentor = await Mentor.findOne({ mentorID: String(mentorID) });
-        
+
         if (!mentor || mentor.password !== password) {
             return res.status(400).json({ success: false, message: "Invalid mentorID or Password" });
         }
@@ -86,11 +85,6 @@ app.post("/api/mentor/login", async (req, res) => {
         res.status(500).json({ success: false, message: "Server error", error });
     }
 });
-
-
-
-
-
 
 // ✅ Student Schema
 const studentSchema = new mongoose.Schema({
@@ -167,8 +161,5 @@ app.post("/api/students", async (req, res) => {
 
 // ✅ Start Server on PORT 5002
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Server running on port ${ PORT }`);
 });
-
-
-

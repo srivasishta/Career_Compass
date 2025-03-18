@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const steps = ["User Details", "Academics", "Profile Details"];
 const mentorIDRegex = /^BNM\d{4}$/;
-const emailRegex = /^[a-z]@bnmit\.in$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@bnmit\.in$/;
 
 const MenSettingsPage = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -37,30 +37,44 @@ const MenSettingsPage = () => {
     const [formErrors, setFormErrors] = useState({});
 
     const handleInputChange = (field, value) => {
-        setFormData({ ...formData, [field]: value });
-        setFormErrors({ ...formErrors, [field]: "" }); // Clear errors as user types
+        setFormData((prevData) => ({
+            ...prevData,
+            [field]: value
+        }));
+        // Clear the error as soon as the field is corrected
+        setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: ""
+        }));
     };
+
 
     const validateStep = () => {
         const errors = {};
+
         if (!formData.name) errors.name = "Name is required.";
         if (!formData.mentorID) errors.mentorID = "Mentor ID is required";
         else if (!mentorIDRegex.test(formData.mentorID)) {
             errors.mentorID = "Please enter a valid Mentor ID (e.g., BNM0001)";
         }
+
         if (!formData.mobileNumber) {
             errors.mobileNumber = "Mobile Number is required.";
         } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
             errors.mobileNumber = "Enter a valid 10-digit Mobile Number.";
         }
-        if (!formData.email) errors.email = "Email is required";
-            else if (!emailRegex.test(formData.email)) {
-                errors.email = "Please enter a valid email (e.g., ----@bnmit.in)";
-            }
+
+        if (!formData.collegeEmail) {
+            errors.collegeEmail = "Email is required";
+        } else if (!emailRegex.test(formData.collegeEmail)) {
+            errors.collegeEmail = "Please enter a valid email (e.g., example@bnmit.in)";
+        }
+
         if (!formData.gender) errors.gender = "Gender is required.";
-        if (!formData.dob) errors.dob = "Date of Birth is required.";
 
         setFormErrors(errors);
+
+        // Return true only if no errors exist
         return Object.keys(errors).length === 0;
     };
 
@@ -68,9 +82,11 @@ const MenSettingsPage = () => {
         if (validateStep()) {
             setActiveStep((prev) => prev + 1);
         } else {
-            toast.warn("Please correct the errors before proceeding.");
+            setTimeout(() => {
+                toast.warn("Please correct the errors before proceeding.");
+            }, 200); // Delay warning toast slightly to ensure state updates
         }
-    };
+    };    
 
     const handleReset = () => {
         setActiveStep(0);
@@ -82,7 +98,6 @@ const MenSettingsPage = () => {
             email: "",
             collegeEmail: "",
             gender: "",
-            dob: "",
         });
         setFormErrors({});
     };
@@ -189,7 +204,6 @@ const MenSettingsPage = () => {
                                         <MenuItem value="Male">Male</MenuItem>
                                         <MenuItem value="Female">Female</MenuItem>
                                         <MenuItem value="Others">Others</MenuItem>
-                                        <MenuItem value="Prefer not to say">Prefer not to say</MenuItem>
                                     </Select>
                                     {formErrors.gender && (
                                         <Typography color="error" variant="caption">

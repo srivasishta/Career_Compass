@@ -18,7 +18,13 @@ const Navbar = ({ onDrawerToggle, title }) => {
 
     const handleLogout = () => {
         handleMenuClose();
-        navigate("/student/register"); // Navigate to the register page
+        localStorage.clear();
+        navigate("/login"); // Navigate to the login
+    };
+
+    const handleSettings = () => {
+        handleMenuClose();
+        navigate("/settings"); // Navigate to the login
     };
 
     return (
@@ -73,7 +79,7 @@ const Navbar = ({ onDrawerToggle, title }) => {
                         onClose={handleMenuClose}
                     >
                         <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
+                        <MenuItem onClick={handleSettings}>Settings</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem> 
                     </Menu>
                 </Box>

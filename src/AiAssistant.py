@@ -5,9 +5,7 @@ import google.generativeai as genai
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  
-def home():
-    return "Flask AI Assistant is Running! 🚀"
+CORS(app)
 
 # Configure the Gemini API
 GOOGLE_API_KEY = "AIzaSyAvsbC4c8VMWqnxIqWfQ8zAeUXg2jvF8hE"
@@ -98,7 +96,6 @@ def create_chat_context(history=None):
     
     model = genai.GenerativeModel(
         model_name='gemini-2.0-flash-exp',
-
         generation_config=generation_config,
         safety_settings=safety_settings
     )

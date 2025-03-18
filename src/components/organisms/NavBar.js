@@ -21,10 +21,12 @@ export default function Navbar() {
   const isMentors = location.pathname === '/mentors';
   const isDocuments = location.pathname === '/documents';
   const isSettings = location.pathname === '/settings'
+  const isProfile = location.pathname === '/profile'
   const isContactUs = location.pathname === '/contact-us';
   const isMentormain = location.pathname === '/dashboard-mentor';
   const isMentorSettings = location.pathname === '/settings-mentor';
   const isMentorContact = location.pathname === '/contact-mentor'
+  const isProfileMentor = location.pathname === '/profile-mentor'
 
   const navigate = useNavigate();
 
@@ -48,7 +50,8 @@ export default function Navbar() {
 
   return (<>{!isLoginPage && !isRegisterStudent && !isRegisterMentor &&
     !isDashbaord && !isMentormain && !isMentors && !isDocuments &&
-    !isContactUs && !isSettings && !isMentorLoginPage && !isMentorContact && !isMentorSettings &&
+    !isContactUs && !isSettings && !isMentorLoginPage && !isMentorContact && 
+    !isMentorSettings && !isProfile && !isProfileMentor &&
     <AppBar position="sticky" sx={{ backgroundColor: '#fff', color: 'text.primary', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)', borderBottom: '1px solid #e0e0e0' }} >
       <Toolbar sx={{ mt: "20px" }}>
         {/* Menu Icon - Visible only on smaller screens */}
