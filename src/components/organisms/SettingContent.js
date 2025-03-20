@@ -30,8 +30,8 @@ const SettingsPage = () => {
         collegeEmail: "",
         gender: "",
         dob: "",
-        selectedMajors: [],
-        collegeName: "",
+        selectedMajors: "",
+        employeeIn: "",
         shortBio: "",
     });
 
