@@ -25,6 +25,7 @@ const ProfilePage = () => {
     
     const fetchUserProfile = async () => {
         const usn = localStorage.getItem("usn"); // Ensure 'usn' is stored correctly during login
+        console.log(usn)
         if (!usn) {
             setError("User USN not found. Please log in.");
             setLoading(false);

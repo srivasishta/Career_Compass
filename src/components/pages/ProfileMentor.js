@@ -23,7 +23,7 @@ const MentorProfile = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:5002/api/mentors/${mentorID}`);
+            const response = await axios.get(`http://localhost:5002/api/mentors/BNM0001`);
             console.log(response.data);
             setMentorData(response.data);
         } catch (error) {
@@ -83,7 +83,7 @@ const MentorProfile = () => {
                                     {mentorData.name || "N/A"}
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary">
-                                    {mentorData.collegeName || "N/A"} - {mentorData.expertise?.join(", ") || "N/A"}
+                                    {mentorData.employeeId || "N/A"} - {mentorData.expertise?.join(", ") || "N/A"}
                                 </Typography>
                             </Box>
 
@@ -97,7 +97,6 @@ const MentorProfile = () => {
                                     <Typography variant="body1"><strong>Mobile:</strong> {mentorData.mobileNumber || "N/A"}</Typography>
                                     <Typography variant="body1"><strong>Alt Mobile:</strong> {mentorData.alternateMobileNumber || "N/A"}</Typography>
                                     <Typography variant="body1"><strong>Gender:</strong> {mentorData.gender || "N/A"}</Typography>
-                                    <Typography variant="body1"><strong>Date of Birth:</strong> {mentorData.dob || "N/A"}</Typography>
                                 </Grid>
                             </Grid>
 
