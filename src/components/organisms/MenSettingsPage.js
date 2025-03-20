@@ -17,6 +17,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const steps = ["User Details", "Academics", "Profile Details"];
 const mentorIDRegex = /^BNM\d{4}$/;
@@ -24,14 +25,17 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@bnmit\.in$/;
 
 const MenSettingsPage = () => {
     const [activeStep, setActiveStep] = useState(0);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: "",
+        fullName: "",
         mentorID: "",
-        mobileNumber: "",
-        alternateMobileNumber: "",
-        collegeEmail: "",
+        phoneNumber: "",
+        alternatePhoneNumber: "",
+        email: "",
         gender: "",
-        dob: "",
+        employeeIn: "",
+        selectedMajors: "",
+        bio: ""
     });
 
     const [formErrors, setFormErrors] = useState({});
@@ -52,22 +56,22 @@ const MenSettingsPage = () => {
     const validateStep = () => {
         const errors = {};
 
-        if (!formData.name) errors.name = "Name is required.";
+        if (!formData.fullName) errors.fullName = "fullName is required.";
         if (!formData.mentorID) errors.mentorID = "Mentor ID is required";
         else if (!mentorIDRegex.test(formData.mentorID)) {
             errors.mentorID = "Please enter a valid Mentor ID (e.g., BNM0001)";
         }
 
-        if (!formData.mobileNumber) {
-            errors.mobileNumber = "Mobile Number is required.";
-        } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
-            errors.mobileNumber = "Enter a valid 10-digit Mobile Number.";
+        if (!formData.phoneNumber) {
+            errors.phoneNumber = "Mobile Number is required.";
+        } else if (!/^\d{10}$/.test(formData.phoneNumber)) {
+            errors.phoneNumber = "Enter a valid 10-digit Mobile Number.";
         }
 
-        if (!formData.collegeEmail) {
-            errors.collegeEmail = "Email is required";
-        } else if (!emailRegex.test(formData.collegeEmail)) {
-            errors.collegeEmail = "Please enter a valid email (e.g., example@bnmit.in)";
+        if (!formData.email) {
+            errors.email = "Email is required";
+        } else if (!emailRegex.test(formData.email)) {
+            errors.email = "Please enter a valid email (e.g., example@bnmit.in)";
         }
 
         if (!formData.gender) errors.gender = "Gender is required.";
@@ -86,20 +90,62 @@ const MenSettingsPage = () => {
                 toast.warn("Please correct the errors before proceeding.");
             }, 200); // Delay warning toast slightly to ensure state updates
         }
-    };    
+    };
 
     const handleReset = () => {
         setActiveStep(0);
         setFormData({
-            name: "",
+            fullName: "",
             mentorID: "",
-            mobileNumber: "",
-            alternateMobileNumber: "",
+            phoneNumber: "",
+            alternatePhoneNumber: "",
             email: "",
-            collegeEmail: "",
             gender: "",
+            employeeIn: "",
+            selectedMajors: "",
+            bio: ""
         });
         setFormErrors({});
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            // Sending the form data to the backend
+            const response = await fetch('http://localhost:5002/api/mentor/details', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                toast.success("Form submitted successfully!")
+                console.log("Form submitted", formData);
+                setFormData({
+                    fullName: "",
+                    mentorID: "",
+                    phoneNumber: "",
+                    alternatePhoneNumber: "",
+                    email: "",
+                    gender: "",
+                    employeeIn: "",
+                    selectedMajors: "",
+                    bio: ""
+                });
+                setTimeout(() => {
+                    navigate("/dashboard-mentor");  // Redirect to dashboard
+                }, 1000);  // Delay navigation slightly for better UX
+
+            } else {
+                const errorData = await response.json();
+                toast.error(errorData.message || "An error occurred.");
+            }
+        } catch (error) {
+            toast.error("An error occurred while submitting the form.");
+            console.error("Error submitting form:", error);
+        }
     };
 
     return (
@@ -143,10 +189,10 @@ const MenSettingsPage = () => {
                                     label="Name"
                                     variant="outlined"
                                     fullWidth
-                                    value={formData.name}
-                                    onChange={(e) => handleInputChange("name", e.target.value)}
-                                    error={!!formErrors.name}
-                                    helperText={formErrors.name}
+                                    value={formData.fullName}
+                                    onChange={(e) => handleInputChange("fullName", e.target.value)}
+                                    error={!!formErrors.fullName}
+                                    helperText={formErrors.fullName}
                                 />
                                 <TextField
                                     label="Mentor ID"
@@ -166,18 +212,18 @@ const MenSettingsPage = () => {
                                     label="Mobile Number"
                                     variant="outlined"
                                     fullWidth
-                                    value={formData.mobileNumber}
-                                    onChange={(e) => handleInputChange("mobileNumber", e.target.value)}
-                                    error={!!formErrors.mobileNumber}
-                                    helperText={formErrors.mobileNumber}
+                                    value={formData.phoneNumber}
+                                    onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+                                    error={!!formErrors.phoneNumber}
+                                    helperText={formErrors.phoneNumber}
                                 />
                                 <TextField
                                     label="Alternate Mobile Number"
                                     variant="outlined"
                                     fullWidth
-                                    value={formData.alternateMobileNumber}
+                                    value={formData.alternatePhoneNumber}
                                     onChange={(e) =>
-                                        handleInputChange("alternateMobileNumber", e.target.value)
+                                        handleInputChange("alternatePhoneNumber", e.target.value)
                                     }
                                 />
                             </Box>
@@ -185,10 +231,10 @@ const MenSettingsPage = () => {
                                 label="College Email ID"
                                 variant="outlined"
                                 fullWidth
-                                value={formData.collegeEmail}
-                                onChange={(e) => handleInputChange("collegeEmail", e.target.value)}
-                                error={!!formErrors.collegeEmail}
-                                helperText={formErrors.collegeEmail}
+                                value={formData.email}
+                                onChange={(e) => handleInputChange("email", e.target.value)}
+                                error={!!formErrors.email}
+                                helperText={formErrors.email}
                             />
                             <Box sx={{ display: "flex", gap: 2 }}>
                                 <FormControl fullWidth>
@@ -223,30 +269,19 @@ const MenSettingsPage = () => {
                         </Typography>
                         <Divider sx={{ mb: 3 }} />
 
-                        {/* Graduation Year */}
-                        <FormControl fullWidth sx={{ mb: 2 }}>
-                            <Typography fontFamily="Courier">What is your graduation year?</Typography>
-                            <TextField
-                                id="year"
-                                select
-                                defaultValue="2025"
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                variant="standard"
-                            >
-                                {[2023, 2024, 2025, 2026].map((year) => (
-                                    <option key={year} value={year}>
-                                        {year}
-                                    </option>
-                                ))}
-                            </TextField>
-                        </FormControl>
-
                         {/* College */}
                         <FormControl fullWidth sx={{ mb: 2 }}>
                             <Typography fontFamily="Courier">Employee in...</Typography>
-                            <TextField multiline placeholder="Enter your college name" />
+                            <TextField
+                                placeholder="Enter your college name"
+                                label="college name"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.employeeIn}
+                                onChange={(e) => handleInputChange("employeeIn", e.target.value)}
+                                error={!!formErrors.employeeIn}
+                                helperText={formErrors.employeeIn}
+                            />
                         </FormControl>
 
                         {/* Majors */}
@@ -254,7 +289,16 @@ const MenSettingsPage = () => {
                             <Typography id="majors-label" fontFamily="Courier">
                                 Choose your major
                             </Typography>
-                            <TextField multiline placeholder="Enter your Majors..." />
+                            <TextField
+                                multiline placeholder="Enter your Majors..."
+                                label="majors"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.selectedMajors}
+                                onChange={(e) => handleInputChange("selectedMajors", e.target.value)}
+                                error={!!formErrors.selectedMajors}
+                                helperText={formErrors.selectedMajors}
+                            />
                         </FormControl>
                     </>
                 )}
@@ -269,10 +313,15 @@ const MenSettingsPage = () => {
                         </Typography>
                         <TextField
                             fullWidth
+                            label = "bio"
                             placeholder="How would I like to contribute..."
                             multiline
                             variant="outlined"
                             sx={{ mb: 3 }}
+                            value={formData.bio}
+                            onChange={(e) => handleInputChange("bio", e.target.value)}
+                            error={!!formErrors.bio}
+                            helperText={formErrors.bio}
                         />
                     </>
                 )}
@@ -300,7 +349,7 @@ const MenSettingsPage = () => {
                                 Reset
                             </Button>
                             <Button
-                                onClick={() => toast.success("Form submitted successfully!")}
+                                onClick={handleSubmit}
                                 variant="contained"
                                 color="primary"
                                 endIcon={<CheckCircleIcon />}
