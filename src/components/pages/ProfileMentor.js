@@ -8,14 +8,22 @@ import NavDash from "../organisms/NavMentor";
 const MentorProfile = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [title, setTitle] = useState("Mentor Profile");
-    const [mentorData, setMentorData] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    const sidebarOptions = [
+        { label: "Dashboard", id: "dashboard-mentor" },
+        { label: "Settings", id: "settings-mentor" },
+        { label: "Contact Us", id: "contact-mentor" },
+        { label: "Profile", id: "profile-mentor" },
+    ];
+
     // ✅ Fetch Mentor Profile
     const fetchMentorProfile = async () => {
         const mentorID = localStorage.getItem("mentorID"); // Make sure 'mentorID' is stored during login
+        console.log(mentorID);
         if (!mentorID) {
             setError("Mentor ID not found. Please log in.");
             setLoading(false);
@@ -23,9 +31,14 @@ const MentorProfile = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:5002/api/mentors/BNM0001`);
+            const response = await axios.get(`http://localhost:5002/api/mentors/${mentorID}`);
             console.log(response.data);
-            setMentorData(response.data);
+            setUserData({
+                ...response.data,
+                selectedMajors: Array.isArray(response.data.selectedMajors)
+                    ? response.data.selectedMajors
+                    : response.data.selectedMajors ? [response.data.selectedMajors] : []
+            });
         } catch (error) {
             console.error("Error fetching mentor profile:", error);
             setError("Could not fetch profile. Please try again later.");
@@ -43,8 +56,11 @@ const MentorProfile = () => {
     };
 
     const handleMenuClick = (path) => {
-        setTitle(path);
-        navigate(`/${path}`);
+        const selectedOption = sidebarOptions.find((option) => option.id === path);
+        if (selectedOption) {
+            setTitle(selectedOption.label);
+            navigate(`/${path}`);
+        }
     };
 
     if (loading) {
@@ -55,7 +71,7 @@ const MentorProfile = () => {
         );
     }
 
-    if (error || !mentorData) {
+    if (error || !userData) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
                 <Typography variant="h6" color="error">{error || "Mentor profile not found!"}</Typography>
@@ -77,33 +93,34 @@ const MentorProfile = () => {
                         <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Avatar sx={{ width: 100, height: 100, mb: 2 }}>
-                                    {mentorData.name ? mentorData.name.charAt(0).toUpperCase() : "?"}
+                                    {userData.fullName ? userData.fullName.charAt(0).toUpperCase() : "?"}
                                 </Avatar>
                                 <Typography variant="h5" fontWeight="bold">
-                                    {mentorData.name || "N/A"}
+                                    {userData.fullName || "N/A"}
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary">
-                                    {mentorData.employeeId || "N/A"} - {mentorData.expertise?.join(", ") || "N/A"}
+                                    {userData.employeeIn || "N/A"} - {userData.selectedMajors?.join(", ") || "N/A"}
                                 </Typography>
                             </Box>
 
                             <Grid container spacing={3} sx={{ mt: 3 }}>
                                 <Grid item xs={12} sm={6}>
-                                    <Typography variant="body1"><strong>Mentor ID:</strong> {mentorData.ID || "N/A"}</Typography>
-                                    <Typography variant="body1"><strong>Email:</strong> {mentorData.email || "N/A"}</Typography>
-                                    <Typography variant="body1"><strong>College Email:</strong> {mentorData.collegeEmail || "N/A"}</Typography>
+                                    <Typography variant="body1"><strong>Mentor ID:</strong> {userData.mentorID || "N/A"}</Typography>
+                                    <Typography variant="body1"><strong>Name:</strong> {userData.fullName || "N/A"}</Typography>
+                                    <Typography variant="body1"><strong>Email:</strong> {userData.email || "N/A"}</Typography>
+                                    <Typography variant="body1"><strong>Employee In: </strong> {userData.employeeIn || "N/A"}</Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <Typography variant="body1"><strong>Mobile:</strong> {mentorData.mobileNumber || "N/A"}</Typography>
-                                    <Typography variant="body1"><strong>Alt Mobile:</strong> {mentorData.alternateMobileNumber || "N/A"}</Typography>
-                                    <Typography variant="body1"><strong>Gender:</strong> {mentorData.gender || "N/A"}</Typography>
+                                    <Typography variant="body1"><strong>Mobile:</strong> {userData.phoneNumber || "N/A"}</Typography>
+                                    <Typography variant="body1"><strong>Alt Mobile:</strong> {userData.alternatePhoneNumber || "N/A"}</Typography>
+                                    <Typography variant="body1"><strong>Gender:</strong> {userData.gender || "N/A"}</Typography>
                                 </Grid>
                             </Grid>
 
                             <Box mt={3}>
                                 <Typography variant="h6">About Me</Typography>
                                 <Typography variant="body1" sx={{ mt: 1, fontStyle: "italic" }}>
-                                    {mentorData.shortBio || "No bio available"}
+                                    {userData.bio || "No bio available"}
                                 </Typography>
                             </Box>
                         </Paper>

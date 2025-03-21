@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Box, Drawer, Container } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -10,18 +10,18 @@ const ContactDash = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const [title, setTitle] = useState("Dashboard");
 
     // Define the sidebar options and map them to their paths
-    const sidebarOptions = [
+    const sidebarOptions = useMemo(() => [
         { label: "Dashboard", id: "dashboard" },
         { label: "Mentors", id: "mentors" },
         { label: "Documents", id: "dashboard" },
         { label: "Settings", id: "settings" },
         { label: "Contact Us", id: "contact-us" },
-    ];
+        { label: "Profile", id: "profile" },
+    ], []);
 
-    // Derive the title from the current location
-    const [title, setTitle] = useState("Dashboard");
     useEffect(() => {
         const currentOption = sidebarOptions.find(
             (option) => `/${option.id}` === location.pathname

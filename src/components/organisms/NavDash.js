@@ -16,6 +16,11 @@ const Navbar = ({ onDrawerToggle, title }) => {
         setAnchorEl(null);
     };
 
+    const handleProfile = () => {
+        handleMenuClose();
+        navigate("/profile-mentor"); // Navigate to the login
+    };
+
     const handleLogout = () => {
         handleMenuClose();
         localStorage.clear();
@@ -25,6 +30,10 @@ const Navbar = ({ onDrawerToggle, title }) => {
     const handleSettings = () => {
         handleMenuClose();
         navigate("/settings"); // Navigate to the login
+    };
+
+    const handleTitleClick = () => {
+        navigate("/"); // Navigate to home when title is clicked
     };
 
     return (
@@ -39,7 +48,8 @@ const Navbar = ({ onDrawerToggle, title }) => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center"
-                }}>
+                }}
+            >
                 <IconButton
                     color="inherit"
                     aria-label="open drawer"
@@ -62,6 +72,7 @@ const Navbar = ({ onDrawerToggle, title }) => {
                         cursor: "pointer",
                         fontSize: 38
                     }}
+                    onClick={handleTitleClick} // Make title clickable
                 >
                     {title}
                 </Typography>
@@ -78,9 +89,9 @@ const Navbar = ({ onDrawerToggle, title }) => {
                         open={Boolean(anchorEl)}
                         onClose={handleMenuClose}
                     >
-                        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+                        <MenuItem onClick={handleProfile}>Profile</MenuItem>
                         <MenuItem onClick={handleSettings}>Settings</MenuItem>
-                        <MenuItem onClick={handleLogout}>Logout</MenuItem> 
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </Box>
             </Toolbar>

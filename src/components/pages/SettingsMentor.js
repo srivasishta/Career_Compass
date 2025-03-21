@@ -14,9 +14,9 @@ const SettingsMentor = () => {
     // Function to derive the title based on the current path
     const getTitleFromPath = () => {
         const path = location.pathname.slice(1); // Remove the leading "/"
+        if (path === "settings-mentor") return "Settings"
         return path.charAt(0).toUpperCase() + path.slice(1) || "Dashboard"; // Capitalize the first letter or default to "Dashboard"
     };
-
 
     const handleMenuClick = (menu) => {
         navigate(`/${menu.toLowerCase()}`);
