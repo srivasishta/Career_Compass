@@ -1,25 +1,34 @@
 import React from "react";
-import { Box, Typography, Divider, Card, CardContent, CardMedia, Grid } from "@mui/material";
+import { Box, Typography, Divider, Card, CardContent, Grid, IconButton } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // Tick icon
+import CancelIcon from "@mui/icons-material/Cancel"; // Cross icon
 
 export default function MentorTrainingPage() {
-    // Array of card content
+    // Array of student details
     const trainingModules = [
         {
             title: "Student 1",
-            description: "Here are some things to get your mentorship started off on the right track.",
-            image: "https://via.placeholder.com/150", // Replace with actual image URL
+            description: "Student Details from Database.",
         },
         {
             title: "Student 2",
-            description: "Here are some thoughtful approaches to mentoring with diversity and inclusion in mind.",
-            image: "https://via.placeholder.com/150", // Replace with actual image URL
+            description: "Student Details from Database.",
         },
         {
             title: "Student 3",
-            description: "To foster the best environment and relationship between you and your student, Career Compass has a list of sample scenarios you might encounter.",
-            image: "https://via.placeholder.com/150", // Replace with actual image URL
+            description: "Student Details from Database.",
         },
     ];
+
+    const handleAccept = (studentName) => {
+        console.log(`${studentName} accepted`);
+        // Add logic for accepting the student
+    };
+
+    const handleReject = (studentName) => {
+        console.log(`${studentName} rejected`);
+        // Add logic for rejecting the student
+    };
 
     return (
         <Box
@@ -42,12 +51,12 @@ export default function MentorTrainingPage() {
                 </Typography>
 
                 {/* Subheading */}
-                <Box sx = {{width: '100%'}}>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3, fontFamily: 'Gilroy', textAlign: "center" }}>
-                    The below optional training modules provide additional information about what is expected of you as
-                    a mentor and what you can expect from Career Compass; the tools and resources available to you as a Career Compass
-                    mentor; and other helpful information to make your mentoring experience a success!
-                </Typography>
+                <Box sx={{ width: '100%' }}>
+                    <Typography variant="body1" color="text.secondary" sx={{ mb: 3, fontFamily: 'Gilroy', textAlign: "center" }}>
+                        The below optional training modules provide additional information about what is expected of you as
+                        a mentor and what you can expect from Career Compass; the tools and resources available to you as a Career Compass
+                        mentor; and other helpful information to make your mentoring experience a success!
+                    </Typography>
                 </Box>
 
                 {/* Divider */}
@@ -59,27 +68,21 @@ export default function MentorTrainingPage() {
                         <Grid item xs={12} sm={6} md={3} key={index}>
                             <Card
                                 sx={{
-                                    height: "100%",
+                                    height: "auto",
                                     display: "flex",
                                     flexDirection: "column",
                                     boxShadow: 3,
                                     borderRadius: 2,
+                                    justifyContent: "space-between",
                                 }}
                             >
-                                {/* Image */}
-                                <CardMedia
-                                    component="img"
-                                    height="180"
-                                    image={module.image}
-                                    alt={module.title}
-                                />
                                 {/* Content */}
-                                <CardContent>
+                                <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography
                                         variant="h6"
                                         fontWeight="bold"
                                         gutterBottom
-                                        sx={{ textAlign: "center", fontSize: 16, fontFamily:"courier" }}
+                                        sx={{ textAlign: "center", fontSize: 16, fontFamily: "courier" }}
                                     >
                                         {module.title}
                                     </Typography>
@@ -87,6 +90,24 @@ export default function MentorTrainingPage() {
                                         {module.description}
                                     </Typography>
                                 </CardContent>
+
+                                {/* Action Buttons */}
+                                <Box sx={{ display: "flex", justifyContent: "space-around", p: 2 }}>
+                                    <IconButton
+                                        color="primary"
+                                        onClick={() => handleAccept(module.title)}
+                                        sx={{ bgcolor: "lightblue", "&:hover": { bgcolor: "blue", color: "white" } }}
+                                    >
+                                        <CheckCircleIcon />
+                                    </IconButton>
+                                    <IconButton
+                                        color="error"
+                                        onClick={() => handleReject(module.title)}
+                                        sx={{ bgcolor: "lightcoral", "&:hover": { bgcolor: "red", color: "white" } }}
+                                    >
+                                        <CancelIcon />
+                                    </IconButton>
+                                </Box>
                             </Card>
                         </Grid>
                     ))}

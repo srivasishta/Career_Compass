@@ -64,26 +64,27 @@ export default function MentorSignInPage() {
 
         try {
             console.log("Sending request with:", { mentorID, password });
-
-            // API call to backend for authentication
+        
             const response = await axios.post("http://localhost:5002/api/mentor/login", {
                 mentorID,
                 password
             });
-
-            console.log("Response received:", response.data);
-
-            // Check response success
+        
+            console.log("Response received:", response.data); // ✅ Debugging log
+        
             if (response.data.success) {
+                console.log("Mentor Token:", response.data.token); // ✅ Debug token before storing
                 localStorage.setItem("mentorToken", response.data.token); // Store token
+                localStorage.setItem("mentorID", mentorID);
                 navigate("/dashboard-mentor"); // Redirect to dashboard
             } else {
+                console.log("Error:", response.data.message); // ✅ Log error message
                 setErrorMessage("Invalid Mentor ID or Password. Please try again.");
             }
         } catch (error) {
             console.error("Login error:", error.response ? error.response.data : error);
             setErrorMessage("Login failed. Check your credentials.");
-        }
+        }        
     };
 
     return (

@@ -39,7 +39,7 @@ export default function App() {
           <Route path="/contact-us" element={< ContactDash />} />
           <Route path="/dashboard-mentor" element={< MentorMain />} />
           <Route path="/settings-mentor" element={<SettingsMentor />} />
-          <Route path="/contact-mentor" element={< MentorContact />} />
+          <Route path="/contact-mentor" element={< MentorContact title = {"Contact us"} />} />
           <Route path="/profile-mentor" element={<MentorProfile />} />
         </Routes>
       </Router>

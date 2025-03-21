@@ -12,7 +12,7 @@ import arrow2 from "../../assets/Arrow2.png";
 import redBall from "../../assets/BallRed.png";
 import chatImage from "../../assets/Chat.png"
 import pplImage from "../../assets/pplImage.png"
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CardComponent = ({ icon: Icon, title, description }) => (
   <Box
@@ -37,24 +37,6 @@ const CardComponent = ({ icon: Icon, title, description }) => (
 
 export default function HomePage() {
   const navigate = useNavigate();
-  // Custom scrollbar styles
-  const scrollStyles = {
-    overflowY: "auto",
-    "&::-webkit-scrollbar": {
-      width: "10px",
-    },
-    "&::-webkit-scrollbar-track": {
-      backgroundColor: "#f1f1f1",
-      borderRadius: "5px",
-    },
-    "&::-webkit-scrollbar-thumb": {
-      backgroundColor: "#888",
-      borderRadius: "5px",
-    },
-    "&::-webkit-scrollbar-thumb:hover": {
-      backgroundColor: "#555",
-    },
-  };
   return (
 
     <Box

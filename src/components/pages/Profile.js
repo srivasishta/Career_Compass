@@ -45,7 +45,6 @@ const ProfilePage = () => {
         }
     };
     useEffect(() => {
-
         fetchUserProfile();
     }, []); // ✅ Depend on `usn` to re-fetch if it changes
 

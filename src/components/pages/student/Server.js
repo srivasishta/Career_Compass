@@ -54,7 +54,7 @@ const studentSchema = new mongoose.Schema({
     dob: String,
     graduationYear: String,
     employeeId: String, // ✅ Match frontend `employeeId`
-    selectedMajors: String,
+    selectedMajors: [],
     shortBio: String,
 }, { strict: false });
 
@@ -84,7 +84,6 @@ app.post("/api/mentor/register", async (req, res) => {
             alternatePhoneNumber,
             email,
             gender,
-            graduationYear,
             employeeIn,
             selectedMajors,
             bio
@@ -111,25 +110,21 @@ const mentorDetailsSchema = new mongoose.Schema({
 
 const MentorDetails = mongoose.model("MentorDetails", mentorDetailsSchema);
 
-
-
-app.post("/api/mentor/details", async (req, res) => {
+app.post("/api/mentors/:mentorID", async (req, res) => {
     try {
-        console.log("📩 Mentor Details Request Received:", req.body);
-        const { mentorID, fullName, phoneNumber, alternatePhoneNumber, email, gender, employeeIn, selectedMajors, bio } = req.body;
+        const { mentorID } = req.params;
+        console.log("📩 Fetching mentor details for:", mentorID); // ✅ Log request
 
-        // Check if mentor details already exist
-        const existingDetails = await MentorDetails.findOne({ mentorID });
-        if (existingDetails) {
-            return res.status(400).json({ message: "Mentor details already exist for this ID" });
+        const mentorDetails = await MentorDetails.findOne({ mentorID });
+        console.log("🎯 Mentor Details Found:", mentorDetails); // ✅ Log fetched data
+
+        if (!mentorDetails) {
+            return res.status(404).json({ message: "Mentor profile not found" });
         }
 
-        const newMentorDetails = new MentorDetails({ mentorID, fullName, phoneNumber, alternatePhoneNumber, email, gender, employeeIn, selectedMajors, bio });
-        await newMentorDetails.save();
-
-        res.status(201).json({ success: true, message: "Mentor details stored successfully" });
+        res.json(mentorDetails);
     } catch (error) {
-        console.error("❌ Error storing mentor details:", error);
+        console.error("❌ Error fetching mentor details:", error);
         res.status(500).json({ message: "Server error", error });
     }
 });
@@ -137,6 +132,7 @@ app.post("/api/mentor/details", async (req, res) => {
 app.post("/api/mentor/login", async (req, res) => {
     try {
         const { mentorID, password } = req.body;
+
         if (!mentorID || !password) {
             return res.status(400).json({ success: false, message: "Missing mentorID or password" });
         }
@@ -147,7 +143,7 @@ app.post("/api/mentor/login", async (req, res) => {
             return res.status(400).json({ success: false, message: "Invalid mentorID or Password" });
         }
 
-        res.json({ success: true, message: "Login successful" });
+        res.json({ success: true, message: "Login successful", mentorID }); // ✅ Include mentorID in response
     } catch (error) {
         res.status(500).json({ success: false, message: "Server error", error });
     }

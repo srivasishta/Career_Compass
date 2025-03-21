@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardMedia, Typography, Divider, Button, Box } from "@mui/material";
+import { Card, Typography, Divider, Button, Box } from "@mui/material";
 
 const MentorCard = ({ mentor }) => {
   return (
@@ -23,17 +23,6 @@ const MentorCard = ({ mentor }) => {
           borderTopRightRadius: "8px",
         }}
       >
-        <CardMedia
-          component="img"
-          image={mentor.photo}
-          alt={mentor.name}
-          sx={{
-            width: 60,
-            height: 60,
-            borderRadius: "50%",
-            marginRight: "15px",
-          }}
-        />
         <Typography variant="h6" color="white" fontWeight="bold">
           {mentor.name}
         </Typography>

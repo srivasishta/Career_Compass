@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Drawer, Container } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import SidebarMentor from "../organisms/SideBarMentor";
 import NavMentor from "../organisms/NavMentor";
@@ -8,33 +8,36 @@ import MentorContactPage from "../organisms/MenContactContent";
 
 const MentorContact = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [title, setTitle] = useState(""); // Default title
+    const [title, setTitle] = useState("Dashboard"); // Default title
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const sidebarOptions = [
+    const sidebarOptions = useMemo(() => [
         { label: "Dashboard", id: "dashboard-mentor" },
         { label: "Settings", id: "settings-mentor" },
         { label: "Contact Us", id: "contact-mentor" },
-    ];
+        { label: "Profile", id: "profile-mentor" },
+    ], []);
 
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
+    useEffect(() => {
+        const currentOption = sidebarOptions.find(
+            (option) => `/${option.id}` === location.pathname
+        );
+        setTitle(currentOption.label);
+    }, [location.pathname, sidebarOptions]);
 
     const handleMenuClick = (path) => {
-        console.log("executed");
-        
-        const selectedOption = sidebarOptions.find((option) => option.id === path);
-        console.log("selectedOption",selectedOption);
-        
-        if (selectedOption) {
-            setTitle(selectedOption.label); // Update title
-            navigate(`/${selectedOption.id}`); // Navigate to the selected path
+        if (location.pathname !== `/${path}`) {
+            navigate(`/${path}`);
         }
     };
 
-    console.log("title",title);
-    
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };    
+
+    console.log("title", title);
+
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
