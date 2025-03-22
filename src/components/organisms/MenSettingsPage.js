@@ -35,7 +35,8 @@ const MenSettingsPage = () => {
         gender: "",
         employeeIn: "",
         selectedMajors: "",
-        bio: ""
+        bio: "",
+        tech: ""
     });
 
     const [formErrors, setFormErrors] = useState({});
@@ -103,48 +104,35 @@ const MenSettingsPage = () => {
             gender: "",
             employeeIn: "",
             selectedMajors: "",
-            bio: ""
+            bio: "",
+            tech: ""
         });
         setFormErrors({});
     };
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
-            // Sending the form data to the backend
             const response = await fetch('http://localhost:5002/api/mentor/details', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                toast.success("Form submitted successfully!")
-                console.log("Form submitted", formData);
-                setFormData({
-                    fullName: "",
-                    mentorID: "",
-                    phoneNumber: "",
-                    alternatePhoneNumber: "",
-                    email: "",
-                    gender: "",
-                    employeeIn: "",
-                    selectedMajors: "",
-                    bio: ""
-                });
-                setTimeout(() => {
-                    navigate("/dashboard-mentor");  // Redirect to dashboard
-                }, 1000);  // Delay navigation slightly for better UX
-
+                toast.success("Form submitted successfully!");
+                setTimeout(() => navigate("/dashboard-mentor"), 1000);
             } else {
                 const errorData = await response.json();
                 toast.error(errorData.message || "An error occurred.");
             }
         } catch (error) {
-            toast.error("An error occurred while submitting the form.");
-            console.error("Error submitting form:", error);
+            toast.error("Error submitting form.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -271,10 +259,10 @@ const MenSettingsPage = () => {
 
                         {/* College */}
                         <FormControl fullWidth sx={{ mb: 2 }}>
-                            <Typography fontFamily="Courier">Employee in...</Typography>
+                            <Typography fontFamily="Courier">Employee in</Typography>
                             <TextField
                                 placeholder="Enter your college name"
-                                label="college name"
+                                label="College Name"
                                 variant="outlined"
                                 fullWidth
                                 value={formData.employeeIn}
@@ -290,14 +278,31 @@ const MenSettingsPage = () => {
                                 Choose your major
                             </Typography>
                             <TextField
-                                multiline placeholder="Enter your Majors..."
-                                label="majors"
+                                placeholder="Graduated Majors"
+                                label="Majors"
                                 variant="outlined"
                                 fullWidth
                                 value={formData.selectedMajors}
                                 onChange={(e) => handleInputChange("selectedMajors", e.target.value)}
                                 error={!!formErrors.selectedMajors}
                                 helperText={formErrors.selectedMajors}
+                            />
+                        </FormControl>
+                        {/* Tech Stack */}
+                        <FormControl fullWidth
+                            sx={{ mt: 3 }}>
+                            <Typography id="majors-label" fontFamily="Courier">
+                                Tech Stacks
+                            </Typography>
+                            <TextField
+                                placeholder="Tech Stacks that I am fluent with"
+                                label="Fluent Tech Stacks"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.tech}
+                                onChange={(e) => handleInputChange("tech", e.target.value)}
+                                error={!!formErrors.tech}
+                                helperText={formErrors.tech}
                             />
                         </FormControl>
                     </>
@@ -313,7 +318,7 @@ const MenSettingsPage = () => {
                         </Typography>
                         <TextField
                             fullWidth
-                            label = "bio"
+                            label="Bio"
                             placeholder="How would I like to contribute..."
                             multiline
                             variant="outlined"
@@ -353,9 +358,11 @@ const MenSettingsPage = () => {
                                 variant="contained"
                                 color="primary"
                                 endIcon={<CheckCircleIcon />}
+                                disabled={isSubmitting} // Disable during submission
                             >
-                                Submit
+                                {isSubmitting ? "Submitting..." : "Submit"}
                             </Button>
+
                         </>
                     )}
                 </Box>
