@@ -65,7 +65,7 @@ export default function MentorTrainingPage() {
                 {/* Cards Section */}
                 <Grid container spacing={4} justifyContent={'center'} alignItems={'stretch'}>
                     {trainingModules.map((module, index) => (
-                        <Grid item xs={12} sm={6} md={3} key={index}>
+                        <Grid item xs={12} sm={6} md={4} key={index}>
                             <Card
                                 sx={{
                                     height: "auto",

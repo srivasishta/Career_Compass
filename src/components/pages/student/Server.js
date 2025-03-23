@@ -66,7 +66,7 @@ const Student = mongoose.model("Student", studentSchema);
 app.post("/api/mentor/register", async (req, res) => {
     try {
         console.log("📩 Mentor Registration Request Received:", req.body);
-        const { fullName, mentorID, email, password, phoneNumber, alternatePhoneNumber, gender, graduationYear, employeeIn, selectedMajors, bio } = req.body;
+        const { fullName, mentorID, email, password, phoneNumber, alternatePhoneNumber, gender, tech, employeeIn, selectedMajors, bio } = req.body;
 
         // Check if mentor exists
         const existingMentor = await Mentor.findOne({ $or: [{ mentorID }, { email }] });
@@ -84,9 +84,10 @@ app.post("/api/mentor/register", async (req, res) => {
             alternatePhoneNumber,
             email,
             gender,
+            tech,
             employeeIn,
             selectedMajors,
-            bio
+            bio, 
         });
         await newMentorDetails.save();
 
@@ -105,7 +106,8 @@ const mentorDetailsSchema = new mongoose.Schema({
     gender: String,
     employeeIn: String,  // Company/Organization Name
     selectedMajors: String, // Array of selected majors
-    bio: String
+    bio: String, 
+    tech: String
 }, { collection: "mentor_details" });
 
 const MentorDetails = mongoose.model("MentorDetails", mentorDetailsSchema);
@@ -149,20 +151,49 @@ app.post("/api/mentor/login", async (req, res) => {
     }
 });
 
-app.get("/api/mentors/:mentorID", async (req, res) => {
+app.post("/api/mentor/details", async (req, res) => {
     try {
-        const { mentorID } = req.params;
+        console.log("📩 Received Mentor Details:", req.body);
 
-        // Find mentor details
-        const mentorDetails = await MentorDetails.findOne({ mentorID });
+        const { mentorID, fullName, phoneNumber, alternatePhoneNumber, email, gender, tech, employeeIn, selectedMajors, bio } = req.body;
 
-        if (!mentorDetails) {
-            return res.status(404).json({ message: "Mentor profile not found" });
+        if (!mentorID) return res.status(400).json({ message: "mentorID is required" });
+
+        // ✅ Check if mentor already exists
+        const existingMentor = await MentorDetails.findOne({ mentorID });
+        if (existingMentor) {
+            return res.status(400).json({ message: "Mentor details already exist" });
         }
 
-        res.json(mentorDetails);
+        // ✅ Create new mentor details
+        const newMentorDetails = new MentorDetails({
+            mentorID,
+            fullName,
+            phoneNumber,
+            alternatePhoneNumber,
+            email,
+            gender,
+            tech,
+            employeeIn,
+            selectedMajors,
+            bio
+        });
+
+        await newMentorDetails.save();
+        console.log("✅ Mentor Details Saved:", newMentorDetails);
+        res.status(201).json({ success: true, message: "Mentor details stored successfully" });
     } catch (error) {
-        console.error("❌ Error fetching mentor details:", error);
+        console.error("❌ Error storing mentor details:", error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
+app.get("/api/mentor/details", async (req, res) => {
+    try {
+        const mentors = await MentorDetails.find({}, "fullName selectedMajors bio tech");
+        res.json(mentors);
+    } catch (error) {
+        console.error("❌ Error fetching mentors:", error);
         res.status(500).json({ message: "Server error", error });
     }
 });

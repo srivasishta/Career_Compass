@@ -7,12 +7,12 @@ const MentorCard = ({ mentor }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100%",  // Ensure the card takes up full height within its container
+        height: "100%",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         borderRadius: "8px",
       }}
     >
-      {/* Top part with user photo and name */}
+      {/* Mentor Name */}
       <Box
         sx={{
           display: "flex",
@@ -24,14 +24,14 @@ const MentorCard = ({ mentor }) => {
         }}
       >
         <Typography variant="h6" color="white" fontWeight="bold">
-          {mentor.name}
+          {mentor.fullName}
         </Typography>
       </Box>
 
-      {/* Specialization and Divider */}
+      {/* Specialization */}
       <Box sx={{ padding: "15px" }}>
         <Typography variant="body2" fontStyle="italic" color="textSecondary">
-          {mentor.specialization}
+          Tech Stack: {mentor.tech}
         </Typography>
       </Box>
 
@@ -48,17 +48,17 @@ const MentorCard = ({ mentor }) => {
 
       {/* Help With Section */}
       <Box sx={{ padding: "15px" }}>
-        <Typography variant="body2" color="textSecondary" sx={{ marginBottom: "30px" }}>
-          Can Help With: {mentor.helpWith}
+        <Typography variant="body2" color="textSecondary" sx={{ marginBottom: "10px" }}>
+          Can Help With: {mentor.selectedMajors}
         </Typography>
         <Button
           fullWidth
           sx={{
-            backgroundColor : '#C4D9FF',
-            color: "black",  
-            '&:hover': {
+            backgroundColor: "#C4D9FF",
+            color: "black",
+            "&:hover": {
               backgroundColor: "#6A80B9",
-              color: "white"
+              color: "white",
             },
           }}
         >
