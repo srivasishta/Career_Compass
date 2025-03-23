@@ -188,6 +188,16 @@ app.post("/api/mentor/details", async (req, res) => {
     }
 });
 
+app.get("/api/mentor/details", async (req, res) => {
+    try {
+        const mentors = await MentorDetails.find({}, "fullName selectedMajors bio tech");
+        res.json(mentors);
+    } catch (error) {
+        console.error("❌ Error fetching mentors:", error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
 /* -----------------------------------
    ✅ Student APIs
 -------------------------------------*/
