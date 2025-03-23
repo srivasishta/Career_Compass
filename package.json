@@ -38,11 +38,11 @@
     "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+  "start": "concurrently \"react-scripts start\" \"node C:/Users/sathv/OneDrive/Documents/VSCodes/finalproject/src/components/pages/student/Server.js\" \"python C:/Users/sathv/OneDrive/Documents/VSCodes/finalproject/src/AiAssistant.py\" \"node C:/Users/sathv/OneDrive/Documents/VSCodes/finalproject/src/Analysis.js\"",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+},
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -67,6 +67,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
     "babel-loader": "^9.2.1",
+    "concurrently": "^9.1.2",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.0"
