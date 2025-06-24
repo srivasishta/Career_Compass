@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# 🎓 MentorLink – A Mentorship Platform for Student Growth
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+MentorLink is an intelligent full-stack web application built using the **MERN stack (MongoDB, Express.js, React.js, Node.js)**. It connects degree-level students with experienced mentors to foster both **technical and non-technical growth**. The platform includes **SWOT analysis**, **roadmap generation**, and an **AI-powered chatbot** to deliver personalized career guidance.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Key Features
 
-### `npm start`
+### 👨‍🏫 Mentor Interface
+- Mentor registration with details like education, experience, expertise areas
+- Manage mentorship slots and availability
+- Connect with students via **chat 
+- View student goals and help them track progress
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🧑‍🎓 Student Interface
+- Student registration with education background, interests, and goals
+- Browse and connect with domain-relevant mentors
+  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 📊 SWOT Analysis
+- Collected using **Google Forms**
+- Data stored and analyzed via **Excel processing**
+- Generates **personalized strengths, weaknesses, opportunities, and threats**
+- Helps mentors better understand students' needs
 
-### `npm test`
+### 🤖 AI-Powered Career Chatbot
+- Integrated **AI chatbot** (OpenAI-based or similar)
+- Students can ask **career-related questions**
+- Real-time, intelligent answers related to roles, technologies, companies, and learning paths
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🎯 Roadmap Generation
+- Based on student's interests, experience, and SWOT
+- Tailored learning paths with milestones and recommended resources
+- Built using logic layers in the backend with AI-assisted suggestions
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Technology      | Description                            |
+|-----------------|----------------------------------------|
+| React.js        | Dynamic and responsive frontend        |
+| Node.js         | Backend runtime environment            |
+| Express.js      | RESTful API framework                  |
+| MongoDB         | NoSQL database for storing users, sessions, etc. | |
+| Python (Excel)  | For SWOT data analysis and roadmap generation |
+| Gemini API      | For chatbot integration (career guidance) |
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
